@@ -1,6 +1,6 @@
 # getting_cleaning_data_course_project
 
-R script called run_analysis.R that does the following
+R script called run_analysis.R does the following
 
 Merges the training and the test sets to create one data set.
 Extracts only the measurements on the mean and standard deviation for each measurement.
