@@ -19,6 +19,6 @@ The run_analysis.R script performs the data preparation and then followed by the
 4)Appropriately labels the data set with descriptive variable names.
 5)From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
-FinalData.txt is the exported final data after going through all the sequences described above.
+Final_Data.txt is the exported final data after going through all the sequences described above.
 
 
