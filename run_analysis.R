@@ -1,4 +1,7 @@
+#check your current working directory
 getwd()
+
+#set your intented working directory for this project
 setwd("C:/Git_Clarivate/_RStudio/getting_cleaning_data_course_project")
 
 #load required package
@@ -18,7 +21,7 @@ if (!file.exists("UCI HAR Dataset")) {
         unzip(filename) 
 }
 
-
+#assign each data to variables
 features <- read.table("UCI HAR Dataset/features.txt", col.names = c("n","functions"))
 str(features)
 activities <- read.table("UCI HAR Dataset/activity_labels.txt", col.names = c("code", "activity"))
@@ -41,51 +44,53 @@ str(y_train)
 #Step 1: Merges the training and the test sets to create one data set.
 
 X <- rbind(x_train, x_test)
+str(X)
 Y <- rbind(y_train, y_test)
+str(Y)
 Subject <- rbind(subject_train, subject_test)
+str(Subject)
 Merged_Data <- cbind(Subject, Y, X)
-head(Merged_Data,1)
+str(Merged_Data)
 
 #Step 2: Extracts only the measurements on the mean and standard deviation for each measurement.
 
-TidyData <- Merged_Data %>% select(subject, code, contains("mean"), contains("std"))
-head(TidyData,1)
+Selected_Data <- Merged_Data %>% select(subject, code, contains("mean"), contains("std"))
+str(Selected_Data)
 
 #Step 3: Uses descriptive activity names to name the activities in the data set.
 
-TidyData$code <- activities[TidyData$code, 2]
+Selected_Data$code <- activities[Selected_Data$code, 2]
 
-head(TidyData$code)
+str(Selected_Data$code)
 
 #Step 4: Appropriately labels the data set with descriptive variable names.
 
-names(TidyData)
+names(Selected_Data)
 
-names(TidyData)[2] = "activity"
-names(TidyData)<-gsub("Acc", "Accelerometer", names(TidyData))
-names(TidyData)<-gsub("Gyro", "Gyroscope", names(TidyData))
-names(TidyData)<-gsub("BodyBody", "Body", names(TidyData))
-names(TidyData)<-gsub("Mag", "Magnitude", names(TidyData))
-names(TidyData)<-gsub("^t", "Time", names(TidyData))
-names(TidyData)<-gsub("^f", "Frequency", names(TidyData))
-names(TidyData)<-gsub("tBody", "TimeBody", names(TidyData))
-names(TidyData)<-gsub("-mean()", "Mean", names(TidyData), ignore.case = TRUE)
-names(TidyData)<-gsub("-std()", "STD", names(TidyData), ignore.case = TRUE)
-names(TidyData)<-gsub("-freq()", "Frequency", names(TidyData), ignore.case = TRUE)
-names(TidyData)<-gsub("angle", "Angle", names(TidyData))
-names(TidyData)<-gsub("gravity", "Gravity", names(TidyData))
+names(Selected_Data)[2] = "activity"
+names(Selected_Data)<-gsub("Acc", "Accelerometer", names(Selected_Data))
+names(Selected_Data)<-gsub("Gyro", "Gyroscope", names(Selected_Data))
+names(Selected_Data)<-gsub("BodyBody", "Body", names(Selected_Data))
+names(Selected_Data)<-gsub("Mag", "Magnitude", names(Selected_Data))
+names(Selected_Data)<-gsub("^t", "Time", names(Selected_Data))
+names(Selected_Data)<-gsub("^f", "Frequency", names(Selected_Data))
+names(Selected_Data)<-gsub("tBody", "TimeBody", names(Selected_Data))
+names(Selected_Data)<-gsub("-mean()", "Mean", names(Selected_Data), ignore.case = TRUE)
+names(Selected_Data)<-gsub("-std()", "STD", names(Selected_Data), ignore.case = TRUE)
+names(Selected_Data)<-gsub("-freq()", "Frequency", names(Selected_Data), ignore.case = TRUE)
+names(Selected_Data)<-gsub("angle", "Angle", names(Selected_Data))
+names(Selected_Data)<-gsub("gravity", "Gravity", names(Selected_Data))
 
-names(TidyData)
+names(Selected_Data)
 
 
 #Step 5: From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
-FinalData <- TidyData %>%
+Final_Data <- Selected_Data %>%
         group_by(subject, activity) %>%
         summarise_all(funs(mean))
 
-FinalData
-str(FinalData)
+str(Final_Data)
 
-write.table(FinalData, "FinalData.txt", row.name=FALSE)
+write.table(Final_Data, "Final_Data.txt", row.name=FALSE)
 
